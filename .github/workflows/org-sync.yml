@@ -4,10 +4,14 @@
 #   jobs:
 #     org-sync:
 #       uses: GlassineOS/.github/.github/workflows/org-sync.yml@main
+#       secrets: inherit
 name: org-sync
 
 on:
   workflow_call:
+    secrets:
+      GLASSINE_ORG_READ:   # see safety-scan.yml
+        required: false
 
 permissions:
   contents: read
@@ -19,14 +23,18 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
+          token: ${{ secrets.GLASSINE_ORG_READ || github.token }}
       - name: Submodule present and current
+        env:
+          TOKEN: ${{ secrets.GLASSINE_ORG_READ || github.token }}
         run: |
           sub=.glassine/org
           if [ ! -d "$sub/.git" ] && [ ! -f "$sub/.git" ]; then
             echo "::warning::$sub submodule missing (see GlassineOS/.github SPECS.md)"; exit 0
           fi
           pinned=$(git -C "$sub" rev-parse HEAD)
-          latest=$(git ls-remote https://github.com/GlassineOS/.github refs/heads/main | cut -f1)
+          latest=$(git -c http.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$TOKEN" | base64 -w0)" \
+            ls-remote https://github.com/GlassineOS/.github refs/heads/main | cut -f1)
           if [ -z "$latest" ]; then
             echo "::warning::could not read GlassineOS/.github main (private repository without token?)"
           elif [ "$pinned" != "$latest" ]; then

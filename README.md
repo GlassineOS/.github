@@ -30,6 +30,7 @@ on: [push, pull_request]
 jobs:
   safety:
     uses: GlassineOS/.github/.github/workflows/safety-scan.yml@main
+    secrets: inherit
 ```
 
 Per-repository exceptions go in `.safety-scan` at the repository root (see the header

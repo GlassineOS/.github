@@ -3,10 +3,17 @@
 #   jobs:
 #     safety:
 #       uses: GlassineOS/.github/.github/workflows/safety-scan.yml@main
+#       secrets: inherit
 name: safety-scan
 
 on:
   workflow_call:
+    secrets:
+      # Read-only token for GlassineOS/.github while it is private (callers pass
+      # `secrets: inherit`). Without it the default token is used, which is all a
+      # public .github needs: delete the org secret then, nothing else changes.
+      GLASSINE_ORG_READ:
+        required: false
   push:
   pull_request:
 
@@ -24,5 +31,6 @@ jobs:
         with:
           repository: GlassineOS/.github
           path: .glassine-org
+          token: ${{ secrets.GLASSINE_ORG_READ || github.token }}
       - name: Scan the whole history
         run: bash .glassine-org/scripts/safety-scan.sh --all
