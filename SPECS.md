@@ -64,12 +64,9 @@ Then run `/speckit-constitution` once and fill only the repository section.
 - After a submodule update:
   `uvx --from git+https://github.com/github/spec-kit.git@v1.1.0 specify preset update glassine --dev .glassine/org/speckit-preset`.
 
-While `GlassineOS/.github` is private, CI reads it with the organization secret
-`GLASSINE_ORG_READ` (fine-grained token, read-only Contents on `GlassineOS/.github`
-only); callers pass `secrets: inherit`. Without the secret the workflows fall back to the
-default token, so once `.github` is public the secret can simply be deleted. Dependabot
-needs private-repository access to `GlassineOS/.github` in the organization settings
-for submodule updates while it is private.
+`GlassineOS/.github` is public, so CI reads it with the default token. The
+workflows still accept an optional `GLASSINE_ORG_READ` secret (read-only token) for a
+caller that ever needs to read a private organization repository; none uses it today.
 
 Verified 2026-10-03 with Spec Kit 1.1.0 and the Claude integration: `init --preset`
 materializes the organization constitution, `specify preset resolve` returns the

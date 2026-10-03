@@ -9,9 +9,8 @@ name: safety-scan
 on:
   workflow_call:
     secrets:
-      # Read-only token for GlassineOS/.github while it is private (callers pass
-      # `secrets: inherit`). Without it the default token is used, which is all a
-      # public .github needs: delete the org secret then, nothing else changes.
+      # Optional read-only token, only needed if GlassineOS/.github were private.
+      # It is public, so the default token is used (verified 2026-10-03).
       GLASSINE_ORG_READ:
         required: false
   push:
