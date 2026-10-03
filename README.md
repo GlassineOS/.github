@@ -10,6 +10,9 @@ Organization-wide defaults for GlassineOS repositories:
 | `scripts/safety-scan.sh` | blocks vendor binaries, dumps, keys and personal data |
 | `scripts/install-hooks.sh` | installs the scan as pre-commit and pre-push hooks |
 | `.github/workflows/safety-scan.yml` | the scan as a reusable CI workflow |
+| `SPECS.md` | how specs, contracts, acceptance and decisions are organised across repositories |
+| `speckit-preset/` | the `glassine` Spec Kit preset: organization constitution + spec template |
+| `.github/workflows/org-sync.yml` | soft check: submodule and preset up to date |
 
 ## Use the safety scan in a repository
 

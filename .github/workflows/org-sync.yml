@@ -1,0 +1,44 @@
+# Reusable workflow: warn when a repository's organization defaults are out of date.
+# Soft check: annotations only, never fails the build.
+#
+#   jobs:
+#     org-sync:
+#       uses: GlassineOS/.github/.github/workflows/org-sync.yml@main
+name: org-sync
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Submodule present and current
+        run: |
+          sub=.glassine/org
+          if [ ! -d "$sub/.git" ] && [ ! -f "$sub/.git" ]; then
+            echo "::warning::$sub submodule missing (see GlassineOS/.github SPECS.md)"; exit 0
+          fi
+          pinned=$(git -C "$sub" rev-parse HEAD)
+          latest=$(git ls-remote https://github.com/GlassineOS/.github refs/heads/main | cut -f1)
+          if [ -z "$latest" ]; then
+            echo "::warning::could not read GlassineOS/.github main (private repository without token?)"
+          elif [ "$pinned" != "$latest" ]; then
+            echo "::warning::$sub is at ${pinned:0:12}, GlassineOS/.github main is at ${latest:0:12}: update the submodule"
+          fi
+      - name: Installed preset matches the submodule
+        run: |
+          want=$(sed -n 's/^ *version: *"\{0,1\}\([^"]*\)"\{0,1\}$/\1/p' .glassine/org/speckit-preset/preset.yml 2>/dev/null | head -1)
+          [ -n "$want" ] || exit 0
+          have=$(python3 -c 'import json,sys; print(json.load(open(".specify/presets/.registry"))["presets"]["glassine"]["version"])' 2>/dev/null)
+          if [ -z "$have" ]; then
+            echo "::warning::glassine Spec Kit preset not installed (specify preset add --dev .glassine/org/speckit-preset)"
+          elif [ "$have" != "$want" ]; then
+            echo "::warning::glassine preset $have installed, submodule has $want: run specify preset update glassine --dev .glassine/org/speckit-preset"
+          fi
