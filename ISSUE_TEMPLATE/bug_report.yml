@@ -1,0 +1,74 @@
+name: Bug report
+description: Something doesn't work as it should on a supported device.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please **remove serial numbers, MAC addresses, Wi-Fi names
+        and personal data** from anything you paste. Never attach RAM dumps or partition
+        images publicly; we'll ask privately if we need them.
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device
+      options:
+        - Onyx Boox Note Air (1st gen)
+        - Other (say which below)
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: GlassineOS version
+      description: "Image version (YYYY.MM…) and, if known, kernel version (`uname -r`)."
+      placeholder: "2026.11, 7.2.3"
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Display / e-ink refresh
+        - Touch / pen
+        - Keyboard / input
+        - Desktop / shell / settings
+        - Wi-Fi / Bluetooth
+        - Audio
+        - Battery / charging / sleep
+        - Updates / packages
+        - Installer / recovery / boot
+        - App (say which)
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        Relevant output, redacted. Useful: `dmesg | tail -n 200`, `/var/log/messages`,
+        the output of the failing command.
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I removed serial numbers, MAC addresses and personal data from this report.
+          required: true

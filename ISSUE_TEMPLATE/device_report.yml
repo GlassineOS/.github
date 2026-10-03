@@ -1,0 +1,48 @@
+name: Device information
+description: Share facts about a Boox model (hardware, bootloader, firmware) to help future ports.
+labels: [device]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This helps us judge whether a device could run GlassineOS. **Don't** run risky
+        commands for this report, and remove serial numbers and MAC addresses.
+        Questions about devices belong in [Discussions](https://github.com/orgs/GlassineOS/discussions).
+  - type: input
+    id: model
+    attributes:
+      label: Model
+      placeholder: "Boox Note Air 3 C"
+    validations:
+      required: true
+  - type: input
+    id: firmware
+    attributes:
+      label: Onyx firmware version
+      placeholder: "4.1 (Settings → About)"
+  - type: input
+    id: soc
+    attributes:
+      label: SoC
+      description: "From `getprop ro.board.platform` / `ro.soc.model` over adb, if you know them."
+  - type: dropdown
+    id: unlock
+    attributes:
+      label: Bootloader unlock
+      options:
+        - Unknown
+        - Locked
+        - Unlockable via fastboot
+        - Only via EDL / other method (describe below)
+  - type: textarea
+    id: facts
+    attributes:
+      label: Other facts
+      description: Display controller, partition layout (`ls /dev/block/by-name`), A/B or not, anything else you know.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I removed serial numbers, MAC addresses and personal data.
+          required: true

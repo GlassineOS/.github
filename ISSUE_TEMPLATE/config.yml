@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and ideas
+    url: https://github.com/orgs/GlassineOS/discussions
+    about: Ask questions, share ideas and device reports in Discussions.
+  - name: Security issue
+    url: https://github.com/GlassineOS/.github/blob/main/SECURITY.md
+    about: Report vulnerabilities privately, never in a public issue.

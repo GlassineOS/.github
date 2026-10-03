@@ -1,0 +1,28 @@
+# Reusable workflow: every GlassineOS repository calls it on push and pull request.
+#
+#   jobs:
+#     safety:
+#       uses: GlassineOS/.github/.github/workflows/safety-scan.yml@main
+name: safety-scan
+
+on:
+  workflow_call:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: GlassineOS/.github
+          path: .glassine-org
+      - name: Scan the whole history
+        run: bash .glassine-org/scripts/safety-scan.sh --all
