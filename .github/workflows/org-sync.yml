@@ -45,7 +45,7 @@ jobs:
         run: |
           want=$(sed -n 's/^ *version: *"\{0,1\}\([^"]*\)"\{0,1\}$/\1/p' .glassine/org/speckit-preset/preset.yml 2>/dev/null | head -1)
           [ -n "$want" ] || exit 0
-          have=$(python3 -c 'import json,sys; print(json.load(open(".specify/presets/.registry"))["presets"]["glassine"]["version"])' 2>/dev/null)
+          have=$(python3 -c 'import json,sys; print(json.load(open(".specify/presets/.registry"))["presets"]["glassine"]["version"])' 2>/dev/null || true)
           if [ -z "$have" ]; then
             echo "::warning::glassine Spec Kit preset not installed (specify preset add --dev .glassine/org/speckit-preset)"
           elif [ "$have" != "$want" ]; then
