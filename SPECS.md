@@ -34,6 +34,8 @@ uvx --from git+https://github.com/github/spec-kit.git@v1.1.0 specify init --here
 ```
 
 Commit `.specify/` (except what its own `.gitignore` excludes) and `.claude/skills/speckit-*`.
+Add the line `@.glassine/org/AGENTS.md` to the repository's `CLAUDE.md`: it imports the
+organization guidance for coding agents (project knowledge search).
 Then run `/speckit-constitution` once and fill only the repository section.
 
 ## Keeping up to date
@@ -51,7 +53,8 @@ Then run `/speckit-constitution` once and fill only the repository section.
   ```
 
 - **The `org-sync` check** (reusable workflow) warns when the submodule is behind
-  `GlassineOS/.github` main or the installed preset version differs from the submodule's.
+  `GlassineOS/.github` main, the installed preset version differs from the submodule's, or
+  `CLAUDE.md` lacks the `@.glassine/org/AGENTS.md` line.
   It warns; it doesn't fail the build.
 
   ```yaml
