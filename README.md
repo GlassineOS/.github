@@ -12,7 +12,8 @@ Organization-wide defaults for GlassineOS repositories:
 | `.github/workflows/safety-scan.yml` | the scan as a reusable CI workflow |
 | `SPECS.md` | how specs, contracts, acceptance and decisions are organised across repositories |
 | `speckit-preset/` | the `glassine` Spec Kit preset: organization constitution + spec template |
-| `.github/workflows/org-sync.yml` | soft check: submodule and preset up to date |
+| `AGENTS.md` | guidance for coding agents, imported by every repository's `CLAUDE.md` |
+| `.github/workflows/org-sync.yml` | soft check: submodule, preset and agent guidance import up to date |
 
 ## Use the safety scan in a repository
 
