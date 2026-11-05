@@ -26,13 +26,13 @@ DENY_PATHS=(
 )
 DENY_RES=(
   '-----BEGIN ([A-Z]+ )?PRIVATE KEY-----'
-  '(^|[^0-9A-Fa-f:])([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}([^0-9A-Fa-f:]|$)'
   '/home/[a-z_][a-z0-9_-]*/'
   'ghp_[A-Za-z0-9]{36}'
   'github_pat_[A-Za-z0-9_]{40,}'
 )
-# MAC-shaped strings that are not personal: all-zero, broadcast, documentation ranges
-MAC_OK='(00:){5}00|([Ff][Ff]:){5}[Ff][Ff]|(([0-9A-Fa-f]{2}:){2})?(00:00:5[Ee]:)'
+MAC='([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}'
+# MAC addresses that are not personal: all-zero, broadcast, the block IANA keeps for documentation
+MAC_OK='(00:){5}00|([Ff][Ff]:){5}[Ff][Ff]|00:00:5[Ee]:.*'
 ALLOW_PATHS=()
 
 root=$(git rev-parse --show-toplevel 2>/dev/null) || { echo "safety-scan: not in a git repository" >&2; exit 2; }
@@ -61,6 +61,16 @@ matches() {  # matches PATH GLOB...
   return 1
 }
 
+first_mac() {  # reads a file; prints the line of its first address that isn't allowed
+  # Every run of hex digits and colons, so a run with more octets (a fingerprint, IPv6) isn't an address,
+  # and a colon at either end ("addr:aa:...", "aa:...: connected") doesn't hide one. Prints no address: CI logs are public.
+  LC_ALL=C grep -a -n -o -E '[0-9A-Fa-f:]{17,}' |
+    sed -E 's/^([0-9]+):+/\1:/; s/:+$//' |
+    grep -E "^[0-9]+:$MAC\$" |
+    grep -v -E "^[0-9]+:($MAC_OK)\$" |
+    head -n 1 | cut -d: -f1
+}
+
 check_blob() {  # check_blob OID PATH
   local oid=$1 path=$2 size re hit
   [ "${#ALLOW_PATHS[@]}" -gt 0 ] && matches "$path" "${ALLOW_PATHS[@]}" && return
@@ -70,9 +80,10 @@ check_blob() {  # check_blob OID PATH
   [ "$size" -gt "$MAX_SIZE" ] && return
   for re in "${DENY_RES[@]}"; do
     hit=$(git cat-file -p "$oid" | grep -a -n -m1 -E -e "$re" 2>/dev/null) || continue
-    if [[ $re == *'{5}'* ]] && ! grep -q -E -v -e "$MAC_OK" <<<"$hit"; then continue; fi
     flag "$path" "content matches /$re/ at line ${hit%%:*}"
   done
+  hit=$(git cat-file -p "$oid" | first_mac)
+  [ -n "$hit" ] && flag "$path" "a MAC address at line $hit"
 }
 
 scan_staged() {
