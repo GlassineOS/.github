@@ -3,7 +3,7 @@ schema_version: "1.0"
 preset:
   id: "glassine"
   name: "GlassineOS"
-  version: "0.1.0"
+  version: "0.2.0"
   description: "GlassineOS organization constitution and spec template (principles, safety, hardware acceptance)"
   author: "GlassineOS"
   repository: "https://github.com/GlassineOS/.github"

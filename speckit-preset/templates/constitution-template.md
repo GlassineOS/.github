@@ -9,7 +9,7 @@ repository. Repository-specific principles go in the last section.
 ### I. Honest framing
 
 GlassineOS is a hobby project, written largely with AI coding agents and not reviewed by
-subsystem experts. Every README says so. Specs, plans and commit messages state what was
+subsystem experts. Every README says so. Pull requests and commit messages state what was
 verified and how (host test, emulator, which device and date), and say "untested" where
 it applies.
 
@@ -69,5 +69,13 @@ The organization principles change only in `GlassineOS/.github` (preset version 
 repositories pick changes up through their `.glassine/org` submodule. Repository
 principles change by pull request in this repository. Cross-repository decisions are
 recorded as decision records in `GlassineOS/docs`.
+
+Only `spec.md` is committed. It states what a feature does and why, in words that stay
+true whatever the code looks like: no languages, modules, routes or other parts of the
+implementation. Plans, research, data models, contracts drafted for a plan, and task
+lists are working notes for one build. They are not committed, because the code changes
+under them and they go stale; pull requests and commit messages record how something was
+built and why. An interface other repositories depend on is the exception: it is
+specified and versioned by its owner (principle IV).
 
 **Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]

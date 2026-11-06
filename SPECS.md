@@ -10,13 +10,30 @@ the shared constitution and spec template.
 |---|---|---|
 | Organization principles | `GlassineOS/.github` → `speckit-preset/templates/constitution-template.md` | the `glassine` preset |
 | Repository principles | each repository's `.specify/memory/constitution.md`, last section | `/speckit-constitution` |
-| Feature work in one repository | that repository's `specs/###-name/` (spec, plan, tasks) | `/speckit-specify` → `plan` → `tasks` → `implement` |
+| Feature work in one repository | that repository's `specs/###-name/spec.md`, the only file committed | `/speckit-specify` → `plan` → `tasks` → `implement`; the plan and tasks stay local |
 | Interface contracts (protocols, formats, APIs) | the **owning** repository's specs; consumers pin a version | spec + version |
 | Bug fixes | the affected repository | Spec Kit `bug` extension, or a plain issue |
 | Investigations (hardware faults, research) | issues and the lab notebook until they become a feature or fix | no spec flow |
 | End-to-end behaviour of the whole system | `GlassineOS/images` acceptance suite (behavioural scenarios on hardware) | spec + test |
 | Decisions spanning repositories | `GlassineOS/docs/decisions/` | decision records |
 | Tasks across repositories | issues in the organization project, referencing requirement IDs (`FR-001`) | GitHub Projects; `/speckit-taskstoissues` turns a tasks.md into issues |
+
+## Only the spec is committed
+
+`spec.md` says what a feature does and why, without naming the implementation, so it stays
+true through refactors. Everything `/speckit-plan` and `/speckit-tasks` write next to it
+(`plan.md`, `research.md`, `data-model.md`, `contracts/`, `quickstart.md`, `tasks.md`,
+`checklists/`) is a working note for one build: it goes stale as the code changes, and the
+next build runs `/speckit-plan` again against the code as it is then. Pull requests and
+commit messages record how it was built. Interfaces other repositories depend on are
+specified and versioned by their owner instead (constitution principle IV).
+
+Each repository's `.gitignore` keeps the notes out:
+
+```gitignore
+/specs/*/*
+!/specs/*/spec.md
+```
 
 ## Setting up a repository
 
@@ -33,7 +50,8 @@ uvx --from git+https://github.com/github/spec-kit.git@v1.1.0 specify init --here
 .glassine/org/scripts/install-hooks.sh .
 ```
 
-Commit `.specify/` (except what its own `.gitignore` excludes) and `.claude/skills/speckit-*`.
+Commit `.specify/` (except what its own `.gitignore` excludes) and `.claude/skills/speckit-*`,
+and add the two `.gitignore` lines above.
 Add the line `@.glassine/org/AGENTS.md` to the repository's `CLAUDE.md`: it imports the
 organization guidance for coding agents (project knowledge search).
 Then run `/speckit-constitution` once and fill only the repository section.
