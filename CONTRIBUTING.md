@@ -41,7 +41,7 @@ ask not to receive it.
 The organization's safety scan (`scripts/safety-scan.sh` in this repository, also a
 pre-push hook and a CI check) rejects these. Please don't try to work around it:
 
-- Vendor firmware and binaries: waveform files (`*.wbf`), modem/DSP/Wi-Fi firmware,
+- Firmware and binaries of any kind: waveform files (`*.wbf`), modem/DSP/Wi-Fi firmware,
   vendor `.so` libraries, Onyx or Qualcomm images, signed EDL/firehose loaders.
 - Device dumps: partition images, GPT/misc dumps, RAM dumps, logs with serial numbers or
   MAC addresses.
@@ -49,7 +49,16 @@ pre-push hook and a CI check) rejects these. Please don't try to work around it:
 - Output of decompilers run on vendor binaries. Written specifications derived from
   them are fine.
 
-Firmware the device needs is extracted from the user's own device at install time.
+Two kinds of firmware are kept apart:
+
+- **From a device:** anything copied from a device or from a vendor's own images and
+  updates (partition contents, waveforms, calibration, modem and DSP images, vendor
+  libraries and loaders). It is read from the person's own device when it is needed and
+  never shipped, uploaded or hosted.
+- **Published for redistribution:** firmware its owner publishes under a license that
+  allows redistribution, such as `linux-firmware`. An image may include it, only as a
+  package from a distribution's repository, locked and shipped with its license. A
+  repository names the package; it never holds the files.
 
 ## Commits and pull requests
 

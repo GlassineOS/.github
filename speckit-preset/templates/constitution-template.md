@@ -20,11 +20,17 @@ states its failure mode and its escape route before it is implemented. If the es
 depends on what the change could break, the change needs explicit maintainer approval.
 Device-affecting steps never run without the maintainer's go.
 
-### III. Nothing vendor-owned, nothing personal
+### III. Nothing from a device, nothing personal
 
-No vendor firmware or binaries, device dumps, decompiler output, keys, serial numbers, MAC
-addresses or local paths in any repository. Firmware comes from the user's own device at
-install time. The safety scan must pass.
+Nothing copied from a device or from a vendor's own images and updates goes into a
+repository, an image or anything we host: partition contents and dumps, display
+waveforms, calibration data, modem and DSP images, vendor libraries, vendor-signed
+loaders, keys, serial numbers, MAC addresses. What a device needs of that kind is read
+from the person's own device when it is needed and stays on it. Firmware that its owner
+publishes for redistribution (such as `linux-firmware`) may be part of an image, only as
+a package from a distribution's repository, locked like every package and shipped with
+its license; no repository commits the files themselves. No decompiler output and no
+local paths in any repository. The safety scan must pass.
 
 ### IV. Contracts are owned and versioned
 
