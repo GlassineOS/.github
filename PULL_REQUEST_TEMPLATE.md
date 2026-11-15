@@ -13,6 +13,6 @@
 
 ## Checklist
 
-- [ ] No vendor firmware, device dumps, keys or personal data (the safety scan passes).
+- [ ] Nothing copied from a device or a vendor image, no committed firmware files, keys or personal data (the safety scan passes).
 - [ ] AI-assisted commits carry an `Assisted-by:` / `Co-Authored-By:` trailer.
 - [ ] Docs updated where behavior changed.
